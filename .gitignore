@@ -1,0 +1,8 @@
+# Arquivos e pastas da aplicação
+/composer.lock
+/vendor
+
+# Arquivos e pastas de IDE e SO
+/.idea
+/.vscode
+/nbproject
