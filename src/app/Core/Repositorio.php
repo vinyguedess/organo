@@ -38,12 +38,11 @@ abstract class Repositorio
 
     public function conta():int
     {
-        $resultado = $this->conn->fetchAssoc(
-            $this->obterQueryBuilder()
-                ->select('COUNT(*) total')
-                ->from($this->tabela)
-                ->getSql()
-        );
+        $resultado = $this->obterQueryBuilder()
+            ->select('COUNT(*) total')
+            ->from($this->tabela)
+            ->execute()
+            ->fetch();
 
         return $resultado['total'];
     }
