@@ -19,7 +19,7 @@ abstract class Controller implements ControllerProviderInterface
 
         foreach ($this->routes as $httpMethod => $routes) {
             foreach ($routes as $route => $action) {
-                $app->$httpMethod($route, function (Request $request) use($action) {
+                $app->$httpMethod($route, function (Request $request) use($app, $action) {
                     return $this->$action($app, $request);
                 });
             }
