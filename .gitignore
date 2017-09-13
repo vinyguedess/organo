@@ -1,4 +1,5 @@
 # Arquivos e pastas da aplicação
+/.env
 /coverage
 /phpunit.xml
 /vendor

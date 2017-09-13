@@ -1,0 +1,19 @@
+language: php
+sudo: enabled
+
+before_script:
+  - mv phpunit.xml.dist phpunit.xml
+  - sed -i -e 's@xDRIVER@'"$ORGANO_DB_DRIVER"'@g' phpunit.xml
+  - sed -i -e 's@xSERVIDOR@'"$ORGANO_DB_SERVIDOR"'@g' phpunit.xml
+  - sed -i -e 's@xPORTA@'"$ORGANO_DB_PORTA"'@g' phpunit.xml
+  - sed -i -e 's@xNOME@'"$ORGANO_DB_NOME"'@g' phpunit.xml
+  - sed -i -e 's@xUSUARIO@'"$ORGANO_DB_USUARIO"'@g' phpunit.xml
+  - sed -i -e 's@xSENHA@'"$ORGANO_DB_SENHA"'@g' phpunit.xml
+
+
+# deploy:
+#   provider: heroku
+#   api_key:
+#     secure: "MY ENCRYPTED API KEY"
+#   app:
+#     master: organo
