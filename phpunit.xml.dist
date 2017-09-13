@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="phpunit.xsd"
+         verbose="true">
+
+    <testsuites>
+        <testsuite name="Organo Testing">
+            <directory suffix="Test.php">test/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist
+                addUncoveredFilesFromWhitelist="true"
+                processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src/app/</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <env name="ORGANO_DB_DRIVER" value="pdo_pgsql" />
+        <env name="ORGANO_DB_SERVIDOR" value="" />
+        <env name="ORGANO_DB_PORTA" value="" />
+        <env name="ORGANO_DB_NOME" value="" />
+        <env name="ORGANO_DB_USUARIO" value="" />
+        <env name="ORGANO_DB_SENHA" value="" />
+    </php>
+</phpunit>

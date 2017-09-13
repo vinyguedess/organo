@@ -1,4 +1,6 @@
 # Arquivos e pastas da aplicação
+/coverage
+/phpunit.xml
 /vendor
 
 # Arquivos e pastas de IDE e SO
