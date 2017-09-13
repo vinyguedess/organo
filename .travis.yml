@@ -10,6 +10,7 @@ before_script:
   - sed -i -e 's@xUSUARIO@'"$ORGANO_DB_USUARIO"'@g' phpunit.xml
   - sed -i -e 's@xSENHA@'"$ORGANO_DB_SENHA"'@g' phpunit.xml
 
+install: composer install
 
 # deploy:
 #   provider: heroku
