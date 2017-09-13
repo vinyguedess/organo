@@ -1,0 +1,16 @@
+{
+    "name": "vinyguedess/organogramer",
+    "description": "Teste - Criação de API para definir o organograma de uma empresa",
+    "version": "1.0.0",
+    "keywords": ["organograma", "api", "teste"],
+    
+    "autoload": {
+        "psr-4": {
+            "Organo\\": "src/app/"
+        }
+    },
+    
+    "require": {
+        "silex/silex": "^2.2"
+    }
+}
