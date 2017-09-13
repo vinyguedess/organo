@@ -18,11 +18,11 @@
     </filter>
 
     <php>
-        <env name="ORGANO_DB_DRIVER" value="pdo_pgsql" />
-        <env name="ORGANO_DB_SERVIDOR" value="" />
-        <env name="ORGANO_DB_PORTA" value="" />
-        <env name="ORGANO_DB_NOME" value="" />
-        <env name="ORGANO_DB_USUARIO" value="" />
-        <env name="ORGANO_DB_SENHA" value="" />
+        <env name="ORGANO_DB_DRIVER" value="xDRIVER" />
+        <env name="ORGANO_DB_SERVIDOR" value="xSERVIDOR" />
+        <env name="ORGANO_DB_PORTA" value="xPORTA" />
+        <env name="ORGANO_DB_NOME" value="xNOME" />
+        <env name="ORGANO_DB_USUARIO" value="xUSUARIO" />
+        <env name="ORGANO_DB_SENHA" value="xSENHA" />
     </php>
 </phpunit>

@@ -2,14 +2,27 @@
 
 use Silex\Provider\DoctrineServiceProvider;
 
+function get_env($chave, $respostaPadrao = null)
+{
+    $padrao = "/{$chave}\=(.*)\n/";
+
+    $arquivo = file_get_contents(__DIR__ . '/../../.env');
+    preg_match($padrao, $arquivo, $match);
+
+    if ($match)
+        return $match[1];
+
+    return $respostaPadrao;
+}
+
 
 $app->register(new DoctrineServiceProvider(), [
     'db.options' => [
-        'driver' => 'pdo_pgsql',
-        'host' => 'ec2-204-236-236-188.compute-1.amazonaws.com',
-        'port' => 5432,
-        'dbname' => 'dd237eg3m9o91p',
-        'user' => 'dvclxndnfjymaw',
-        'password' => '979d7c7c30aa6b6bd5d0b7c92cd6aadd43c78f8aa1d372cf4425ffe4e2a4f7cd'
+        'driver' => get_env('ORGANO_DB_DRIVER'),
+        'host' => get_env('ORGANO_DB_SERVIDOR'),
+        'port' => get_env('ORGANO_DB_PORTA'),
+        'dbname' => get_env('ORGANO_DB_NOME'),
+        'user' => get_env('ORGANO_DB_USUARIO'),
+        'password' => get_env('ORGANO_DB_SENHA')
     ]
 ]);
