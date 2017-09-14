@@ -5,6 +5,8 @@ namespace Organo\Test\Funcional\v1;
 
 use Organo\Test\Funcional\WebTestCase;
 use Organo\Test\ProvedorDados\ManipuladorDeDados;
+use Organo\v1\Repositorios\Departamento;
+use Organo\v1\Repositorios\Usuario;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
@@ -126,6 +128,85 @@ class DepartamentosControllerTest extends WebTestCase
 
         $this->assertEquals(JsonResponse::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
         $this->assertFalse($resposta['status']);
+    }
+
+    public function testAtrelarUsuarioADepartamento()
+    {
+        $this->prepararParaAtrelarUsuario();
+
+        $usuario = ManipuladorDeDados::obter('usuario');
+        $departamento = ManipuladorDeDados::obter('departamento.1');
+        
+        $client = $this->createClient();
+        $client->request("POST", "/api/v1/departamentos/{$departamento['id']}/atrelar/{$usuario['id']}");
+        $resposta = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertTrue($resposta['status']);
+    }
+
+    public function testErroAoAtrelarUsuarioInexistente()
+    {
+        $departamento = ManipuladorDeDados::obter('departamento.2');
+
+        $client = $this->createClient();
+        $client->request("POST", "/api/v1/departamentos/{$departamento['id']}/atrelar/-10");
+        $resposta = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(JsonResponse::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
+        $this->assertFalse($resposta['status']);
+    }
+
+    public function testErroAoAtrelarUsuarioADepartamentoInexistente()
+    {
+        $usuario = ManipuladorDeDados::obter('usuario');
+
+        $client = $this->createClient();
+        $client->request("POST", "/api/v1/departamentos/-10/atrelar/{$usuario['id']}");
+        $resposta = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(JsonResponse::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
+        $this->assertFalse($resposta['status']);
+    }
+
+    public function testAtrelarUsuarioAUmNovoDepartamento()
+    {
+        $usuario = ManipuladorDeDados::obter('usuario');
+        $departamento = ManipuladorDeDados::obter('departamento.2');
+        
+        $client = $this->createClient();
+        $client->request("POST", "/api/v1/departamentos/{$departamento['id']}/atrelar/{$usuario['id']}");
+        $resposta = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertTrue($resposta['status']);
+
+        $this->finalizarAtrelamentoDeUsuario();
+    }
+
+    private function prepararParaAtrelarUsuario():void
+    {
+        $usuario = ['nome' => 'Vinicius Guedes'];
+        (new Usuario($this->app['db']))->inserir($usuario);
+        ManipuladorDeDados::definir('usuario', $usuario);
+
+        $departamentoUm = ['nome' => 'Presidencia'];
+        (new Departamento($this->app['db']))->inserir($departamentoUm);
+        ManipuladorDeDados::definir('departamento.1', $departamentoUm);
+
+        $departamentoDois = ['nome' => 'Diretoria'];
+        (new Departamento($this->app['db']))->inserir($departamentoDois);
+        ManipuladorDeDados::definir('departamento.2', $departamentoDois);
+    }
+
+    private function finalizarAtrelamentoDeUsuario():void
+    {
+        (new Usuario($this->app['db']))->remover(["id > ?"], [0]);
+        (new Departamento($this->app['db']))->remover(["id > ?"], [0]);
+
+        ManipuladorDeDados::remover('usuario');
+        ManipuladorDeDados::remover('departamento.1');
+        ManipuladorDeDados::remover('departamento.2');
     }
 
 }

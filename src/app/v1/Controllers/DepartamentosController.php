@@ -14,21 +14,39 @@ class DepartamentosController extends Controller
 {
     
     public $routes = [
-        'post' => [
-            '/api/v1/departamentos' => 'createAction'
-        ],
-        'put' => [
-            '/api/v1/departamentos/{id}' => 'updateAction'
+        'delete' => [
+            '/api/v1/departamentos/{id}' => 'deletarAction'
         ],
         'get' => [
-            '/api/v1/departamentos/{id}' => 'viewAction'
+            '/api/v1/departamentos/{id}' => 'consultarAction'
         ],
-        'delete' => [
-            '/api/v1/departamentos/{id}' => 'deleteAction'
+        'post' => [
+            '/api/v1/departamentos/{departamento_id}/atrelar/{usuario_id}' => 'atrelarUsuarioAction',
+            '/api/v1/departamentos' => 'inserirAction'
+        ],
+        'put' => [
+            '/api/v1/departamentos/{id}' => 'atualizarAction'
         ]
     ];
 
-    protected function createAction(Application $app, Request $request)
+    protected function atrelarUsuarioAction(Application $app, Request $request)
+    {
+        $usuario = $request->get('usuario_id');
+        $departamento = $request->get('departamento_id');
+
+        $repositorio = new Departamento($app['db']);
+        
+        if (!$repositorio->atrelarUsuario($departamento, $usuario))
+            return new JsonResponse([
+                'status' => false
+            ], JsonResponse::HTTP_BAD_REQUEST);
+
+        return new JsonResponse([
+            'status' => true
+        ], JsonResponse::HTTP_OK);
+    }
+
+    protected function inserirAction(Application $app, Request $request)
     {
         $departamento = $request->get('departamento', []);
 
@@ -45,7 +63,7 @@ class DepartamentosController extends Controller
         ], JsonResponse::HTTP_OK);
     }
 
-    protected function updateAction(Application $app, Request $request)
+    protected function atualizarAction(Application $app, Request $request)
     {
         $departamento = $request->get('departamento', []);
         $departamento['id'] = $request->get('id');
@@ -62,7 +80,7 @@ class DepartamentosController extends Controller
         return new JsonResponse(['status' => true], JsonResponse::HTTP_OK);
     }
 
-    protected function viewAction(Application $app, Request $request)
+    protected function consultarAction(Application $app, Request $request)
     {
         $repositorio = new Departamento($app['db']);
         $departamento = $repositorio->obtemPorId($request->get('id'));
@@ -74,7 +92,7 @@ class DepartamentosController extends Controller
         return new JsonResponse(['status' => true, 'data' => $departamento], JsonResponse::HTTP_OK);
     }
 
-    protected function deleteAction(Application $app, Request $request)
+    protected function deletarAction(Application $app, Request $request)
     {
         $repositorio = new Departamento($app['db']);
         if (!$repositorio->removerPorId($request->get('id')))

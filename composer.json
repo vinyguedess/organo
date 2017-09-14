@@ -27,6 +27,6 @@
     },
 
     "scripts": {
-        "test": "./vendor/phpunit/phpunit/phpunit -c phpunit.xml --coverage-html coverage"
+        "test": "./vendor/phpunit/phpunit/phpunit  -c phpunit.xml --coverage-html coverage"
     }
 }

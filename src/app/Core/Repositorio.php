@@ -177,4 +177,9 @@ abstract class Repositorio
         return $this->conn->createQueryBuilder();
     }
 
+    protected function desconectar():void
+    {
+        $this->conn->close();
+    }
+
 }
