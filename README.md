@@ -5,11 +5,11 @@
 API para gerenciamento de organograma de uma empresa
 
 ## Rotas
+Rotas contempladas na API
 
 ### Usuários
-Rotas para manipulação de dados de usuários<br />
-POST /api/v1/usuarios        Cria um usuário<br />
-PUT  /api/v1/usuarios/{id}   Atualiza um usuário selecionado<br />
-GET  /api/v1/usuarios        Lista usuários<br />
-GET  /api/v1/usuarios/{id}   Exibe os dados do usuário selecionado<br />
-DEL  /api/v1/usuarios/{id}   Deleta um usuário selecionado
+*POST* /api/v1/usuarios        Cria um usuário<br />
+*PUT*  /api/v1/usuarios/{id}   Atualiza um usuário selecionado<br />
+*GET*  /api/v1/usuarios        Lista usuários<br />
+*GET*  /api/v1/usuarios/{id}   Exibe os dados do usuário selecionado<br />
+*DEL*  /api/v1/usuarios/{id}   Deleta um usuário selecionado

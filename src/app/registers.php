@@ -6,13 +6,16 @@ use Silex\Provider\DoctrineServiceProvider;
 if (!function_exists('get_env')) {
     function get_env($chave, $respostaPadrao = null)
     {
-        $padrao = "/{$chave}\=(.*)\n/";
+        if (getenv($chave)) return getenv($chave);
 
-        $arquivo = file_get_contents(__DIR__ . '/../../.env');
-        preg_match($padrao, $arquivo, $match);
+        if (file_exists(__DIR__ . '/../../.env')) {
+            $padrao = "/{$chave}\=(.*)\n/";
+            $arquivo = file_get_contents(__DIR__ . '/../../.env');
+            preg_match($padrao, $arquivo, $match);
 
-        if ($match)
-            return $match[1];
+            if ($match)
+                return $match[1];
+        }
 
         return $respostaPadrao;
     }
