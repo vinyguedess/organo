@@ -1,7 +1,5 @@
 # Organo
-
 [![Build Status](https://travis-ci.org/vinyguedess/organo.svg?branch=master)](https://travis-ci.org/vinyguedess/organo)
-
 API para gerenciamento de organograma de uma empresa
 
 ## Rotas
