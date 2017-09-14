@@ -15,21 +15,21 @@ class UsuariosController extends Controller
 
     protected $routes = [
         'delete' => [
-            '/api/v1/usuarios/{id}' => 'deleteAction'
+            '/api/v1/usuarios/{id}' => 'deletarAction'
         ],
         'get' => [
-            '/api/v1/usuarios' => 'indexAction',
-            '/api/v1/usuarios/{id}' => 'viewAction'
+            '/api/v1/usuarios' => 'listarAction',
+            '/api/v1/usuarios/{id}' => 'consultarAction'
         ],
         'post' => [
-            '/api/v1/usuarios' => 'createAction'
+            '/api/v1/usuarios' => 'inserirAction'
         ],
         'put' => [
-            '/api/v1/usuarios/{id}' => 'updateAction'
+            '/api/v1/usuarios/{id}' => 'atualizarAction'
         ]
     ];
 
-    protected function createAction(Application $app, Request $request)
+    protected function inserirAction(Application $app, Request $request)
     {
         $usuario = $request->get('usuario', []);
 
@@ -47,7 +47,7 @@ class UsuariosController extends Controller
         ], JsonResponse::HTTP_OK);
     }
 
-    protected function updateAction(Application $app, Request $request)
+    protected function atualizarAction(Application $app, Request $request)
     {
         $usuario = $request->get('usuario', []);
         $usuario['id'] = $request->get('id');
@@ -67,7 +67,7 @@ class UsuariosController extends Controller
         ], JsonResponse::HTTP_OK);
     }
 
-    protected function indexAction(Application $app, Request $request)
+    protected function listarAction(Application $app, Request $request)
     {
         $repositorio = new Usuario($app['db']);
 
@@ -81,14 +81,14 @@ class UsuariosController extends Controller
         ], JsonResponse::HTTP_OK);
     }
 
-    protected function viewAction(Application $app, Request $request)
+    protected function consultarAction(Application $app, Request $request)
     {
         $usuario = (new Usuario($app['db']))
             ->obtemPorId($request->get('id'));
 
         if (!$usuario)
             return new JsonResponse([
-                'status' => false, 'message' => 'Usuário não encontrado'
+                'status' => false, 'message' => ['Usuário não encontrado']
             ], JsonResponse::HTTP_NOT_FOUND);
 
         return new JsonResponse([
@@ -97,7 +97,7 @@ class UsuariosController extends Controller
         ], JsonResponse::HTTP_OK);
     }
 
-    protected function deleteAction(Application $app, Request $request)
+    protected function deletarAction(Application $app, Request $request)
     {
         $repositorio = new Usuario($app['db']);
         if (!$repositorio->removerPorId($request->get('id')))

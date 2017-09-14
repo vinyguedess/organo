@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class UsuariosControllerTest extends WebTestCase
 {
 
-    public $usuario_id;
-
     public function testInserirUsuarios()
     {
         $client = $this->createClient();

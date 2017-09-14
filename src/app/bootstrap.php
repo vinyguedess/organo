@@ -1,5 +1,6 @@
 <?php
 
+use Organo\v1\Controllers\DepartamentosController;
 use Organo\v1\Controllers\UsuariosController;
 use Silex\Application;
 
@@ -16,6 +17,7 @@ $app->get('/', function() {
     return "Bem vindo ao Organo";
 });
 $app->mount('', new UsuariosController);
+$app->mount('', new DepartamentosController);
 
 
 return $app;

@@ -21,4 +21,9 @@ class ManipuladorDeDados
         return $valorPadrao;
     }
 
+    public static function remover(string $chave):void
+    {
+        unset(self::$dados[$chave]);
+    }
+
 }
