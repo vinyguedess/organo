@@ -1,5 +1,8 @@
 <?php
 
+namespace Organo\Test\Unitario\v1\Repositorios;
+
+
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 use Organo\v1\Repositorios\Usuario;
