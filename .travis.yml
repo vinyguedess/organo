@@ -14,5 +14,5 @@ before_script:
 
 install: composer install
 
-after_sucess:
+after_success:
   - codecov
