@@ -8,33 +8,28 @@ use Organo\Test\ProvedorDados\ManipuladorDeDados;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class UsuariosControllerTest extends WebTestCase
+class DepartamentosControllerTest extends WebTestCase
 {
 
-    public function testInserirUsuarios()
+    public function testCriacaoDeDepartamentos()
     {
         $client = $this->createClient();
-        $client->request('POST', '/api/v1/usuarios', [
-            'usuario' => [
-                'nome' => 'Vinicius Guedes'
-            ]
+        $client->request('POST', '/api/v1/departamentos', [
+            'departamento' => ['nome' => 'Presidencia']
         ]);
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertTrue($resposta['status']);
-        $this->assertArrayHasKey('id', $resposta['data']);
 
-        ManipuladorDeDados::definir('usuario.id', $resposta['data']['id']);
+        ManipuladorDeDados::definir('departamento.id', $resposta['data']['id']);
     }
 
-    public function testErroAoInserirUsuarios()
+    public function testErroNaCriacaoDeDepartamentos()
     {
         $client = $this->createClient();
-        $client->request('POST', '/api/v1/usuarios', [
-            'usuario' => [
-                'n' => 'Vinicius Guedes'
-            ]
+        $client->request('POST', '/api/v1/departamentos', [
+            'departamento' => ['nm' => 'Presidencia']
         ]);
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
@@ -42,12 +37,12 @@ class UsuariosControllerTest extends WebTestCase
         $this->assertFalse($resposta['status']);
     }
 
-    public function testAtualizarUsuario()
+    public function testAtualizacaoDeDepartamentos()
     {
-        $id = ManipuladorDeDados::obter('usuario.id');
+        $id = ManipuladorDeDados::obter('departamento.id');
         $client = $this->createClient();
-        $client->request('PUT', "/api/v1/usuarios/{$id}", [
-            'usuario' => [ 'status' => false ]
+        $client->request('PUT', "/api/v1/departamentos/{$id}", [
+            'departamento' => ['nome' => 'Diretoria']
         ]);
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
@@ -55,11 +50,11 @@ class UsuariosControllerTest extends WebTestCase
         $this->assertTrue($resposta['status']);
     }
 
-    public function testErroAoAtualizarUsuarioInexistente()
+    public function testErroNaAtualizacaoDeDepartamentoInexistente()
     {
         $client = $this->createClient();
-        $client->request('PUT', "/api/v1/usuarios/1", [
-            'usuario' => [ 'status' => false ]
+        $client->request('PUT', "/api/v1/departamentos/-8", [
+            'departamento' => ['nome' => 'Presidencia']
         ]);
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
@@ -67,11 +62,12 @@ class UsuariosControllerTest extends WebTestCase
         $this->assertFalse($resposta['status']);
     }
 
-    public function testErroAoAtualizarUsuario()
+    public function testErroNaAtualizacaoDeDepartamentos()
     {
+        $id = ManipuladorDeDados::obter('departamento.id');
         $client = $this->createClient();
-        $client->request('PUT', "/api/v1/usuarios/1", [
-            'usuario' => [ 'st' => false ]
+        $client->request('PUT', "/api/v1/departamentos/{$id}", [
+            'departamento' => ['nm' => 'Presidencia']
         ]);
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
@@ -79,66 +75,53 @@ class UsuariosControllerTest extends WebTestCase
         $this->assertFalse($resposta['status']);
     }
 
-    public function testConsultaUsuarios()
+    public function testConsultarDepartamentoPorId()
     {
+        $id = ManipuladorDeDados::obter('departamento.id');
         $client = $this->createClient();
-        $client->request('GET', '/api/v1/usuarios', ['limit' => 5]);
+        $client->request('GET', "/api/v1/departamentos/{$id}");
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertTrue($resposta['status']);
-        $this->assertLessThanOrEqual(5, count($resposta['data']));
     }
 
-    public function testConsultaUsuarioPorId()
-    {
-        $id = ManipuladorDeDados::obter('usuario.id');
-
-        $client = $this->createClient();
-        $client->request('GET', "/api/v1/usuarios/{$id}");
-        $resposta = json_decode($client->getResponse()->getContent(), true);
-
-        $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
-        $this->assertTrue($resposta['status']);
-        $this->assertEquals($id, $resposta['data']['id']);
-    }
-
-    public function testErroAoConsultarUsuarioPorId()
+    public function testErroAoConsultarDepartamentoPorIdInexistente()
     {
         $client = $this->createClient();
-        $client->request('GET', "/api/v1/usuarios/1");
+        $client->request('GET', "/api/v1/departamentos/-8");
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
         $this->assertFalse($resposta['status']);
     }
 
-    public function testExcluirUsuario()
+    public function testExcluirDepartamento()
     {
-        $id = ManipuladorDeDados::obter('usuario.id');
+        $id = ManipuladorDeDados::obter('departamento.id');
+        
         $client = $this->createClient();
-        $client->request('DELETE', "/api/v1/usuarios/{$id}");
+        $client->request('DELETE', "/api/v1/departamentos/{$id}");
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertTrue($resposta['status']);
     }
 
-    public function testErroAoExcluirUsuarioInexistente()
+    public function testErroAoExcluirDepartamentoInexistente()
     {
-        $id = ManipuladorDeDados::obter('usuario.id');
         $client = $this->createClient();
-        $client->request('DELETE', "/api/v1/usuarios/{$id}");
+        $client->request('DELETE', "/api/v1/departamentos/-8");
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
         $this->assertFalse($resposta['status']);
     }
 
-    public function testErroAoExcluirUsuario()
+    public function testErroAoExcluirDepartamento()
     {
         $client = $this->createClient();
-        $client->request('DELETE', "/api/v1/usuarios/abc");
+        $client->request('DELETE', "/api/v1/departamentos/abc");
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());

@@ -35,6 +35,8 @@ abstract class Repositorio
         } catch (\Exception $ex) {
             $this->adicionarErro($ex->getMessage());
             return false;
+        } finally {
+            $this->conn->close();
         }
     }
 
@@ -64,6 +66,8 @@ abstract class Repositorio
         } catch (\Exception $ex) {
             $this->adicionarErro($ex->getMessage());
             return false;
+        } finally {
+            $this->conn->close();
         }
     }
 
@@ -75,12 +79,14 @@ abstract class Repositorio
             ->execute()
             ->fetch();
 
+        $this->conn->close();
+
         return $resultado['total'];
     }
 
     public function obtem(int $limite = 10, int $apartir = 0):Array
     {
-        return $this->conn->fetchAll(
+        $resultado = $this->conn->fetchAll(
             $this->obterQueryBuilder()
                 ->select('*')
                 ->from($this->tabela)
@@ -88,6 +94,10 @@ abstract class Repositorio
                 ->setFirstResult($apartir)
                 ->getSql()
         );
+
+        $this->conn->close();
+
+        return $resultado;
     }
 
     public function obtemPorId(int $id)
@@ -101,6 +111,8 @@ abstract class Repositorio
             ->setParameter('id', $id)
             ->execute()
             ->fetch();
+
+        $this->conn->close();
 
         if (!$resultado) return null;
 
@@ -126,6 +138,8 @@ abstract class Repositorio
         } catch (\Exception $ex) {
             $this->adicionarErro($ex->getMessage());
             return false;
+        } finally {
+            $this->conn->close();
         }
     }
 
@@ -137,7 +151,10 @@ abstract class Repositorio
         foreach ($filtros as $index => $filtro)
             $qb->where($filtro)->setParameter($index, $valores[$index]);
 
-        return $qb->execute() > 0;
+        $resultado = $qb->execute() > 0;
+        $this->conn->close();
+
+        return $resultado;
     }
 
     public function adicionarErro(string $mensagem):void

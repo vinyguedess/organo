@@ -4,57 +4,54 @@ namespace Organo\v1\Controllers;
 
 
 use Organo\Core\Controller;
-use Organo\v1\Repositorios\Usuario;
+use Organo\v1\Repositorios\Departamento;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 
-class UsuariosController extends Controller
+class DepartamentosController extends Controller
 {
-
-    protected $routes = [
-        'delete' => [
-            '/api/v1/usuarios/{id}' => 'deleteAction'
-        ],
-        'get' => [
-            '/api/v1/usuarios' => 'indexAction',
-            '/api/v1/usuarios/{id}' => 'viewAction'
-        ],
+    
+    public $routes = [
         'post' => [
-            '/api/v1/usuarios' => 'createAction'
+            '/api/v1/departamentos' => 'createAction'
         ],
         'put' => [
-            '/api/v1/usuarios/{id}' => 'updateAction'
+            '/api/v1/departamentos/{id}' => 'updateAction'
+        ],
+        'get' => [
+            '/api/v1/departamentos/{id}' => 'viewAction'
+        ],
+        'delete' => [
+            '/api/v1/departamentos/{id}' => 'deleteAction'
         ]
     ];
 
     protected function createAction(Application $app, Request $request)
     {
-        $usuario = $request->get('usuario', []);
+        $departamento = $request->get('departamento', []);
 
-        $repositorio = new Usuario($app['db']);
-
-        if (!$repositorio->inserir($usuario))
+        $repositorio = new Departamento($app['db']);
+        if (!$repositorio->inserir($departamento))
             return new JsonResponse([
                 'status' => false,
                 'message' => $repositorio->obterErros()
-            ], JsonResponse::HTTP_BAD_REQUEST);
+            ], JsonResponse::HTTP_BAD_REQUEST);    
 
         return new JsonResponse([
             'status' => true,
-            'data' => $usuario
+            'data' => $departamento
         ], JsonResponse::HTTP_OK);
     }
 
     protected function updateAction(Application $app, Request $request)
     {
-        $usuario = $request->get('usuario', []);
-        $usuario['id'] = $request->get('id');
+        $departamento = $request->get('departamento', []);
+        $departamento['id'] = $request->get('id');
 
-        $repositorio = new Usuario($app['db']);
-
-        if (!$repositorio->atualizar($usuario))
+        $repositorio = new Departamento($app['db']);
+        if (!$repositorio->atualizar($departamento))
             return new JsonResponse([
                 'status' => false,
                 'message' => $repositorio->obterErros()
@@ -62,44 +59,24 @@ class UsuariosController extends Controller
                 JsonResponse::HTTP_NOT_FOUND : 
                 JsonResponse::HTTP_BAD_REQUEST);
 
-        return new JsonResponse([
-            'status' => true
-        ], JsonResponse::HTTP_OK);
-    }
-
-    protected function indexAction(Application $app, Request $request)
-    {
-        $repositorio = new Usuario($app['db']);
-
-        return new JsonResponse([
-            'status' => true,
-            'total' => $repositorio->conta(),
-            'data' => $repositorio->obtem(
-                    $request->get('limit', 100), 
-                    $request->get('offset', 0)
-                )
-        ], JsonResponse::HTTP_OK);
+        return new JsonResponse(['status' => true], JsonResponse::HTTP_OK);
     }
 
     protected function viewAction(Application $app, Request $request)
     {
-        $usuario = (new Usuario($app['db']))
-            ->obtemPorId($request->get('id'));
-
-        if (!$usuario)
+        $repositorio = new Departamento($app['db']);
+        $departamento = $repositorio->obtemPorId($request->get('id'));
+        if (is_null($departamento))
             return new JsonResponse([
                 'status' => false, 'message' => ['Usuário não encontrado']
             ], JsonResponse::HTTP_NOT_FOUND);
 
-        return new JsonResponse([
-            'status' => true,
-            'data' => $usuario
-        ], JsonResponse::HTTP_OK);
+        return new JsonResponse(['status' => true, 'data' => $departamento], JsonResponse::HTTP_OK);
     }
 
     protected function deleteAction(Application $app, Request $request)
     {
-        $repositorio = new Usuario($app['db']);
+        $repositorio = new Departamento($app['db']);
         if (!$repositorio->removerPorId($request->get('id')))
             return new JsonResponse([
                 'status' => false,
