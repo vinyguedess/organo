@@ -11,6 +11,7 @@ abstract class Repositorio
 {
 
     private $conn;
+    private $erros = [];
 
     public function __construct(Connection $db)
     {
@@ -32,6 +33,36 @@ abstract class Repositorio
             $atributos['id'] = $this->conn->lastInsertId();
             return true;
         } catch (\Exception $ex) {
+            $this->adicionarErro($ex->getMessage());
+            return false;
+        }
+    }
+
+    public function atualizar($atributos)
+    {
+        $qb = $this->obterQueryBuilder()
+            ->update($this->tabela);
+
+        foreach ($atributos as $atributo => $valor) { 
+            if ($atributo === 'id') {
+                $qb->where("id = :{$atributo}")
+                    ->setParameter($atributo, $valor);
+                continue;
+            }
+
+            $qb->set($atributo, ":{$atributo}")
+                ->setParameter($atributo, !$valor ? 0 : $valor);
+        }
+
+        try {
+            if (!$qb->execute() > 0) {
+                $this->adicionarErro("Erro ao atualizar registro inexistente");
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $ex) {
+            $this->adicionarErro($ex->getMessage());
             return false;
         }
     }
@@ -81,12 +112,21 @@ abstract class Repositorio
         $qb = $this->obterQueryBuilder();
         $expr = $qb->expr();
         
-        $resultado = $qb->delete($this->tabela)
+        $qb->delete($this->tabela)
             ->where($expr->eq('id', ':id'))
-            ->setParameter('id', $id)
-            ->execute();
+            ->setParameter('id', $id);
 
-        return $resultado > 0;
+        try {
+            if (!$qb->execute() > 0) {
+                $this->adicionarErro("Erro ao atualizar registro inexistente");
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $ex) {
+            $this->adicionarErro($ex->getMessage());
+            return false;
+        }
     }
 
     public function remover(array $filtros = [], $valores = [])
@@ -98,6 +138,21 @@ abstract class Repositorio
             $qb->where($filtro)->setParameter($index, $valores[$index]);
 
         return $qb->execute() > 0;
+    }
+
+    public function adicionarErro(string $mensagem):void
+    {
+        $this->erros[] = $mensagem;
+    }
+
+    public function obterErros():array
+    {
+        return $this->erros;
+    }
+
+    public function obterErro(int $index)
+    {
+        return isset($this->erros[$index]) ? $this->erros[$index] : null;
     }
 
     protected function obterQueryBuilder():QueryBuilder

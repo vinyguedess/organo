@@ -2,17 +2,20 @@
 
 use Silex\Provider\DoctrineServiceProvider;
 
-function get_env($chave, $respostaPadrao = null)
-{
-    $padrao = "/{$chave}\=(.*)\n/";
 
-    $arquivo = file_get_contents(__DIR__ . '/../../.env');
-    preg_match($padrao, $arquivo, $match);
+if (!function_exists('get_env')) {
+    function get_env($chave, $respostaPadrao = null)
+    {
+        $padrao = "/{$chave}\=(.*)\n/";
 
-    if ($match)
-        return $match[1];
+        $arquivo = file_get_contents(__DIR__ . '/../../.env');
+        preg_match($padrao, $arquivo, $match);
 
-    return $respostaPadrao;
+        if ($match)
+            return $match[1];
+
+        return $respostaPadrao;
+    }
 }
 
 
