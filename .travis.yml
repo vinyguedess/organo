@@ -15,5 +15,4 @@ before_script:
 install: composer install
 
 after_success:
-  - npm install -g codecov
-  - codecov
+  - bash <(curl -s https://codecov.io/bash) -t ${CODECOV_TOKEN}
