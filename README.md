@@ -19,3 +19,6 @@ Rotas contempladas na API
 *GET*  /api/v1/usuarios        Lista usuários<br />
 *GET*  /api/v1/usuarios/{id}   Exibe os dados do usuário selecionado<br />
 *DEL*  /api/v1/usuarios/{id}   Deleta um usuário selecionado
+
+### Atrelar usuário à departamento
+*POST* /api/v1/departamentos/{dpto_id}/atrelar/{usuario_id} Atrelar o usuário selecionado ao departamento

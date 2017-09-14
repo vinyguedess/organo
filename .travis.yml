@@ -14,9 +14,5 @@ before_script:
 
 install: composer install
 
-# deploy:
-#   provider: heroku
-#   api_key:
-#     secure: "MY ENCRYPTED API KEY"
-#   app:
-#     master: organo
+after_sucess:
+  - codecov
