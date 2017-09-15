@@ -32,14 +32,23 @@ Rotas contempladas na API
 
 ### Departamentos
 * **POST** /api/v1/departamentos        Cria um departamento<br />
+    * **Formato** { "departamento": { "id_departamento_pai": "ID PAI", "nome": "NOME DO USUARIO" } }
+    * **Info** Campo **id_departamento_pai** não é obrigatorio
 * **PUT**  /api/v1/departamentos/{id}   Atualiza um departamento selecionado<br />
+    * **Formato** { "departamento": { "id_departamento_pai": "ID PAI", "nome": "NOME DO USUARIO" } }
+    * **Info** Campo **id_departamento_pai** não é obrigatorio
 * **GET**  /api/v1/departamentos/{id}   Exibe os dados do departamento selecionado<br />
 * **DEL**  /api/v1/departamentos/{id}   Deleta um departamento selecionado
 
 ### Usuários
 * **POST** /api/v1/usuarios        Cria um usuário<br />
+    * **Formato** { "usuario": { "nome": "NOME DO USUARIO", "status": "UM OU ZERO" } }
+    * **Info** Campo **status** não é obrigatorio
 * **PUT**  /api/v1/usuarios/{id}   Atualiza um usuário selecionado<br />
+    * **Formato** { "usuario": { "nome": "NOME DO USUARIO", "status": "UM OU ZERO" } }
+    * **Info** Campo **status** não é obrigatorio
 * **GET**  /api/v1/usuarios        Lista usuários<br />
+    * Possível enviar **limit** e **offset** na URL para fazer paginação
 * **GET**  /api/v1/usuarios/{id}   Exibe os dados do usuário selecionado<br />
 * **DEL**  /api/v1/usuarios/{id}   Deleta um usuário selecionado
 

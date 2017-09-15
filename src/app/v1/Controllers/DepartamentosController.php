@@ -66,7 +66,8 @@ class DepartamentosController extends Controller
 
     protected function inserirAction(Application $app, Request $request)
     {
-        $departamento = $request->get('departamento', []);
+        $conteudo = json_decode($request->getContent(), true);
+        $departamento = $conteudo['departamento'];
 
         $repositorio = new Departamento($app['db']);
         if (!$repositorio->inserir($departamento))
@@ -83,7 +84,9 @@ class DepartamentosController extends Controller
 
     protected function atualizarAction(Application $app, Request $request)
     {
-        $departamento = $request->get('departamento', []);
+        $conteudo = json_decode($request->getContent(), true);
+
+        $departamento = $conteudo['departamento'];
         $departamento['id'] = $request->get('id');
 
         $repositorio = new Departamento($app['db']);
