@@ -77,6 +77,26 @@ class DepartamentosControllerTest extends WebTestCase
         $this->assertFalse($resposta['status']);
     }
 
+    public function testListaDepartamentos()
+    {
+        $client = $this->createClient();
+        $client->request('GET', "/api/v1/departamentos");
+        $resposta = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertTrue($resposta['status']);
+    }
+
+    public function testListaDepartamentosRecursivamente()
+    {
+        $client = $this->createClient();
+        $client->request('GET', "/api/v1/departamentos?recursive=1");
+        $resposta = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertTrue($resposta['status']);
+    }
+
     public function testConsultarDepartamentoPorId()
     {
         $id = ManipuladorDeDados::obter('departamento.id');

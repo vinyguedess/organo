@@ -11,13 +11,13 @@ class Departamento extends Repositorio
 
     public $tabela = 'departamentos';
 
-    public function obtem(int $limite = 100, int $apartir = 0):array
+    public function obtem(int $recursivo = 0, int $apartir = 0):array
     {
-        $departamentos = parent::obtem($limite, $apartir);
+        $departamentos = parent::obtem(100, $apartir);
+        if (!$recursivo)
+            return $departamentos;
 
-        $estrutura = $this->retornaDepartamentosFilhoDaLista($departamentos);
-
-        return $estrutura;
+        return $this->retornaDepartamentosFilhoDaLista($departamentos);
     }
 
     public function obtemPorId(int $id)

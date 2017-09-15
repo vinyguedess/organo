@@ -89,7 +89,7 @@ class DepartamentosController extends Controller
 
         return new JsonResponse([
             'status' => true,
-            'resultados' => $repositorio->obtem()
+            'resultados' => $repositorio->obtem($request->get('recursive', 0))
         ], JsonResponse::HTTP_OK);
     }
 
