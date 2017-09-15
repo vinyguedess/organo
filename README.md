@@ -1,6 +1,6 @@
 # Organo
 [![Build Status](https://travis-ci.org/vinyguedess/organo.svg?branch=master)](https://travis-ci.org/vinyguedess/organo)
-[![Codecov](https://img.shields.io/codecov/c/github/vinyguedess/organo.svg)]()<br />
+[![Codecov](https://img.shields.io/codecov/c/github/vinyguedess/organo.svg)](https://codecov.io/gh/vinyguedess/organo)<br />
 API para gerenciamento de organograma de uma empresa.<br />
 [Organo](http://organo.herokuapp.com)
 
