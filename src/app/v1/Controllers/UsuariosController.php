@@ -31,7 +31,8 @@ class UsuariosController extends Controller
 
     protected function inserirAction(Application $app, Request $request)
     {
-        $usuario = $request->get('usuario', []);
+        $conteudo = json_decode($request->getContent(), true);
+        $usuario = $conteudo['usuario'];
 
         $repositorio = new Usuario($app['db']);
 
@@ -49,7 +50,9 @@ class UsuariosController extends Controller
 
     protected function atualizarAction(Application $app, Request $request)
     {
-        $usuario = $request->get('usuario', []);
+        $conteudo = json_decode($request->getContent(), true);
+        
+        $usuario = $conteudo['usuario'];
         $usuario['id'] = $request->get('id');
 
         $repositorio = new Usuario($app['db']);

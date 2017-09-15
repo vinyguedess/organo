@@ -66,7 +66,8 @@ class DepartamentosController extends Controller
 
     protected function inserirAction(Application $app, Request $request)
     {
-        $departamento = $request->get('departamento', []);
+        $conteudo = json_decode($request->getContent(), true);
+        $departamento = $conteudo['departamento'];
 
         $repositorio = new Departamento($app['db']);
         if (!$repositorio->inserir($departamento))
@@ -83,7 +84,9 @@ class DepartamentosController extends Controller
 
     protected function atualizarAction(Application $app, Request $request)
     {
-        $departamento = $request->get('departamento', []);
+        $conteudo = json_decode($request->getContent(), true);
+
+        $departamento = $conteudo['departamento'];
         $departamento['id'] = $request->get('id');
 
         $repositorio = new Departamento($app['db']);
@@ -104,7 +107,7 @@ class DepartamentosController extends Controller
         $departamento = $repositorio->obtemPorId($request->get('id'));
         if (is_null($departamento))
             return new JsonResponse([
-                'status' => false, 'message' => ['Usuário não encontrado']
+                'status' => false, 'message' => ['Departamento não encontrado']
             ], JsonResponse::HTTP_NOT_FOUND);
 
         return new JsonResponse(['status' => true, 'data' => $departamento], JsonResponse::HTTP_OK);

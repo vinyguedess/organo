@@ -16,9 +16,9 @@ class DepartamentosControllerTest extends WebTestCase
     public function testCriacaoDeDepartamentos()
     {
         $client = $this->createClient();
-        $client->request('POST', '/api/v1/departamentos', [
+        $client->request('POST', '/api/v1/departamentos', [], [], [], json_encode([
             'departamento' => ['nome' => 'Presidencia']
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -30,9 +30,9 @@ class DepartamentosControllerTest extends WebTestCase
     public function testErroNaCriacaoDeDepartamentos()
     {
         $client = $this->createClient();
-        $client->request('POST', '/api/v1/departamentos', [
+        $client->request('POST', '/api/v1/departamentos', [], [], [], json_encode([
             'departamento' => ['nm' => 'Presidencia']
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
@@ -43,9 +43,9 @@ class DepartamentosControllerTest extends WebTestCase
     {
         $id = ManipuladorDeDados::obter('departamento.id');
         $client = $this->createClient();
-        $client->request('PUT', "/api/v1/departamentos/{$id}", [
+        $client->request('PUT', "/api/v1/departamentos/{$id}", [], [], [], json_encode([
             'departamento' => ['nome' => 'Diretoria']
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -55,9 +55,9 @@ class DepartamentosControllerTest extends WebTestCase
     public function testErroNaAtualizacaoDeDepartamentoInexistente()
     {
         $client = $this->createClient();
-        $client->request('PUT', "/api/v1/departamentos/-8", [
+        $client->request('PUT', "/api/v1/departamentos/-8", [] ,[], [], json_encode([
             'departamento' => ['nome' => 'Presidencia']
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
@@ -68,9 +68,9 @@ class DepartamentosControllerTest extends WebTestCase
     {
         $id = ManipuladorDeDados::obter('departamento.id');
         $client = $this->createClient();
-        $client->request('PUT', "/api/v1/departamentos/{$id}", [
+        $client->request('PUT', "/api/v1/departamentos/{$id}", [], [], [], json_encode([
             'departamento' => ['nm' => 'Presidencia']
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());

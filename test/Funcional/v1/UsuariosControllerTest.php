@@ -14,11 +14,11 @@ class UsuariosControllerTest extends WebTestCase
     public function testInserirUsuarios()
     {
         $client = $this->createClient();
-        $client->request('POST', '/api/v1/usuarios', [
+        $client->request('POST', '/api/v1/usuarios', [], [], [], json_encode([
             'usuario' => [
                 'nome' => 'Vinicius Guedes'
             ]
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -31,11 +31,11 @@ class UsuariosControllerTest extends WebTestCase
     public function testErroAoInserirUsuarios()
     {
         $client = $this->createClient();
-        $client->request('POST', '/api/v1/usuarios', [
+        $client->request('POST', '/api/v1/usuarios', [], [], [], json_encode([
             'usuario' => [
                 'n' => 'Vinicius Guedes'
             ]
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
@@ -46,9 +46,9 @@ class UsuariosControllerTest extends WebTestCase
     {
         $id = ManipuladorDeDados::obter('usuario.id');
         $client = $this->createClient();
-        $client->request('PUT', "/api/v1/usuarios/{$id}", [
+        $client->request('PUT', "/api/v1/usuarios/{$id}", [], [], [], json_encode([
             'usuario' => [ 'status' => false ]
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -58,9 +58,9 @@ class UsuariosControllerTest extends WebTestCase
     public function testErroAoAtualizarUsuarioInexistente()
     {
         $client = $this->createClient();
-        $client->request('PUT', "/api/v1/usuarios/1", [
+        $client->request('PUT', "/api/v1/usuarios/1", [], [], [], json_encode([
             'usuario' => [ 'status' => false ]
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
@@ -70,9 +70,9 @@ class UsuariosControllerTest extends WebTestCase
     public function testErroAoAtualizarUsuario()
     {
         $client = $this->createClient();
-        $client->request('PUT', "/api/v1/usuarios/1", [
+        $client->request('PUT', "/api/v1/usuarios/1", [], [], [], json_encode([
             'usuario' => [ 'st' => false ]
-        ]);
+        ]));
         $resposta = json_decode($client->getResponse()->getContent(), true);
 
         $this->assertEquals(JsonResponse::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
