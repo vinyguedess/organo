@@ -35,11 +35,20 @@ class Departamento extends Repositorio
             ->setParameter('id', $departamento['id_departamento_pai'])
             ->execute()->fetch();
 
-        $departamento['filhos'] = $qb->select('*')
+        $departamento['filhos'] = $this->obterQueryBuilder()
+            ->select('*')
             ->from($this->tabela)
             ->where($expr->eq('id_departamento_pai', ':id'))
             ->setParameter('id', $id)
             ->execute()->fetchAll();
+
+        $departamento['usuarios'] = $this->obterQueryBuilder()
+                ->select('u.*')
+                ->from('departamentos_usuarios')
+                ->innerJoin('departamentos_usuarios', 'usuario', 'u', 'departamentos_usuarios.id_usuario = u.id')
+                ->where($expr->eq('departamentos_usuarios.id_departamento', ':departamento'))
+                ->setParameter('departamento', $id)
+                ->execute()->fetchAll();
 
         return $departamento;
     }
