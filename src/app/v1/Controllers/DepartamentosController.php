@@ -15,7 +15,8 @@ class DepartamentosController extends Controller
     
     public $routes = [
         'delete' => [
-            '/api/v1/departamentos/{id}' => 'deletarAction'
+            '/api/v1/departamentos/{id}' => 'deletarAction',
+            '/api/v1/departamentos/{departamento_id}/atrelar/{usuario_id}' => 'desatrelarUsuarioAction'
         ],
         'get' => [
             '/api/v1/departamentos/{id}' => 'consultarAction'
@@ -37,6 +38,23 @@ class DepartamentosController extends Controller
         $repositorio = new Departamento($app['db']);
         
         if (!$repositorio->atrelarUsuario($departamento, $usuario))
+            return new JsonResponse([
+                'status' => false
+            ], JsonResponse::HTTP_BAD_REQUEST);
+
+        return new JsonResponse([
+            'status' => true
+        ], JsonResponse::HTTP_OK);
+    }
+
+    protected function desatrelarUsuarioAction(Application $app, Request $request)
+    {
+        $usuario = $request->get('usuario_id');
+        $departamento = $request->get('departamento_id');
+
+        $repositorio = new Departamento($app['db']);
+        
+        if (!$repositorio->desatrelarUsuario($departamento, $usuario))
             return new JsonResponse([
                 'status' => false
             ], JsonResponse::HTTP_BAD_REQUEST);

@@ -180,6 +180,31 @@ class DepartamentosControllerTest extends WebTestCase
 
         $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
         $this->assertTrue($resposta['status']);
+    }
+
+    public function testDesatrelarUsuarioDeDepartamento()
+    {
+        $usuario = ManipuladorDeDados::obter('usuario');
+        $departamento = ManipuladorDeDados::obter('departamento.2');
+        
+        $client = $this->createClient();
+        $client->request('DELETE', "/api/v1/departamentos/{$departamento['id']}/atrelar/{$usuario['id']}");
+        $resposta = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(JsonResponse::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertTrue($resposta['status']);
+    }
+
+    public function testErroAoDesatrelarUsuarioADepartamentoInexistente()
+    {
+        $usuario = ManipuladorDeDados::obter('usuario');
+        
+        $client = $this->createClient();
+        $client->request('DELETE', "/api/v1/departamentos/-10/atrelar/{$usuario['id']}");
+        $resposta = json_decode($client->getResponse()->getContent(), true);
+
+        $this->assertEquals(JsonResponse::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
+        $this->assertFalse($resposta['status']);
 
         $this->finalizarAtrelamentoDeUsuario();
     }
