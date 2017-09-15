@@ -104,7 +104,7 @@ class DepartamentosController extends Controller
         $departamento = $repositorio->obtemPorId($request->get('id'));
         if (is_null($departamento))
             return new JsonResponse([
-                'status' => false, 'message' => ['Usuário não encontrado']
+                'status' => false, 'message' => ['Departamento não encontrado']
             ], JsonResponse::HTTP_NOT_FOUND);
 
         return new JsonResponse(['status' => true, 'data' => $departamento], JsonResponse::HTTP_OK);
