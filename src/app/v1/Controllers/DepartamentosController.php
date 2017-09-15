@@ -19,7 +19,8 @@ class DepartamentosController extends Controller
             '/api/v1/departamentos/{departamento_id}/atrelar/{usuario_id}' => 'desatrelarUsuarioAction'
         ],
         'get' => [
-            '/api/v1/departamentos/{id}' => 'consultarAction'
+            '/api/v1/departamentos/{id}' => 'consultarAction',
+            '/api/v1/departamentos' => 'listaAction'
         ],
         'post' => [
             '/api/v1/departamentos/{departamento_id}/atrelar/{usuario_id}' => 'atrelarUsuarioAction',
@@ -79,6 +80,16 @@ class DepartamentosController extends Controller
         return new JsonResponse([
             'status' => true,
             'data' => $departamento
+        ], JsonResponse::HTTP_OK);
+    }
+
+    protected function listaAction(Application $app, Request $request)
+    {
+        $repositorio = new Departamento($app['db']);
+
+        return new JsonResponse([
+            'status' => true,
+            'resultados' => $repositorio->obtem($request->get('recursive', 0))
         ], JsonResponse::HTTP_OK);
     }
 

@@ -11,6 +11,15 @@ class Departamento extends Repositorio
 
     public $tabela = 'departamentos';
 
+    public function obtem(int $recursivo = 0, int $apartir = 0):array
+    {
+        $departamentos = parent::obtem(100, $apartir);
+        if (!$recursivo)
+            return $departamentos;
+
+        return $this->retornaDepartamentosFilhoDaLista($departamentos);
+    }
+
     public function obtemPorId(int $id)
     {
         $departamento = parent::obtemPorId($id);
@@ -90,6 +99,19 @@ class Departamento extends Repositorio
         } finally {
             $this->desconectar();
         }
+    }
+
+    private function retornaDepartamentosFilhoDaLista(array $departamentos, int $id_pai = null)
+    {
+        $resultados = [];
+
+        foreach ($departamentos as $departamento)
+            if ($departamento['id_departamento_pai'] === $id_pai) {
+                $departamento['filhos'] = $this->retornaDepartamentosFilhoDaLista($departamentos, $departamento['id']);
+                $resultados[] = $departamento;
+            }
+
+        return $resultados;
     }
 
     private function validarAntesDeAtrelar(int $departamento_id, int $usuario_id):bool

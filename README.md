@@ -31,25 +31,27 @@ Rotas contempladas na API
 
 
 ### Departamentos
-* **POST** /api/v1/departamentos        Cria um departamento<br />
+* **POST** /api/v1/departamentos        Cria um departamento
     * **Formato** { "departamento": { "id_departamento_pai": "ID PAI", "nome": "NOME DO USUARIO" } }
-    * **Info** Campo **id_departamento_pai** não é obrigatorio
-* **PUT**  /api/v1/departamentos/{id}   Atualiza um departamento selecionado<br />
+    * **Info** Campo **id_departamento_pai** não é obrigatório
+* **PUT**  /api/v1/departamentos/{id}   Atualiza um departamento selecionado
     * **Formato** { "departamento": { "id_departamento_pai": "ID PAI", "nome": "NOME DO USUARIO" } }
-    * **Info** Campo **id_departamento_pai** não é obrigatorio
-* **GET**  /api/v1/departamentos/{id}   Exibe os dados do departamento selecionado<br />
+    * **Info** Campo **id_departamento_pai** não é obrigatório
+* **GET**  /api/v1/departamentos        Lista departamentos
+    * Caso seja enviado o parâmetro **recursive** com valor 1 o resultado vem em formato recursivo
+* **GET**  /api/v1/departamentos/{id}   Exibe os dados do departamento selecionado
 * **DEL**  /api/v1/departamentos/{id}   Deleta um departamento selecionado
 
 ### Usuários
-* **POST** /api/v1/usuarios        Cria um usuário<br />
+* **POST** /api/v1/usuarios        Cria um usuário
     * **Formato** { "usuario": { "nome": "NOME DO USUARIO", "status": "UM OU ZERO" } }
-    * **Info** Campo **status** não é obrigatorio
-* **PUT**  /api/v1/usuarios/{id}   Atualiza um usuário selecionado<br />
+    * **Info** Campo **status** não é obrigatório
+* **PUT**  /api/v1/usuarios/{id}   Atualiza um usuário selecionado
     * **Formato** { "usuario": { "nome": "NOME DO USUARIO", "status": "UM OU ZERO" } }
-    * **Info** Campo **status** não é obrigatorio
-* **GET**  /api/v1/usuarios        Lista usuários<br />
-    * Possível enviar **limit** e **offset** na URL para fazer paginação
-* **GET**  /api/v1/usuarios/{id}   Exibe os dados do usuário selecionado<br />
+    * **Info** Campo **status** não é obrigatório
+* **GET**  /api/v1/usuarios        Lista usuários
+    * Aceita parâmetros **limit** e **offset** na URL para fazer paginação
+* **GET**  /api/v1/usuarios/{id}   Exibe os dados do usuário selecionado
 * **DEL**  /api/v1/usuarios/{id}   Deleta um usuário selecionado
 
 ### Atrelar usuário à departamento
