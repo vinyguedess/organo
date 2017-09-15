@@ -11,6 +11,30 @@ class Departamento extends Repositorio
 
     public $tabela = 'departamentos';
 
+    public function obtemPorId(int $id)
+    {
+        $departamento = parent::obtemPorId($id);
+        if (is_null($departamento))
+            return $departamento;
+
+        $qb = $this->obterQueryBuilder();
+        $expr = $qb->expr();
+
+        $departamento['pai'] = $qb->select('*')
+            ->from($this->tabela)
+            ->where($expr->eq('id_departamento_pai', ':id'))
+            ->setParameter('id', $departamento['id_departamento_pai'])
+            ->execute()->fetch();
+
+        $departamento['filhos'] = $qb->select('*')
+            ->from($this->tabela)
+            ->where($expr->eq('id_departamento_pai', ':id'))
+            ->setParameter('id', $id)
+            ->execute()->fetchAll();
+
+        return $departamento;
+    }
+
     public function atrelarUsuario(int $departamento_id, int $usuario_id):bool
     {
         try {
@@ -31,6 +55,35 @@ class Departamento extends Repositorio
                     ->execute();
 
             return $resultado > 0;
+        } catch (Exception $ex) {
+            $this->adicionarErro($ex->getMessage());
+            return false;
+        } finally {
+            $this->desconectar();
+        }
+    }
+
+    public function desatrelarUsuario(int $departamento_id, int $usuario_id):bool
+    {
+        try {
+            if (!$this->validarAntesDeAtrelar($departamento_id, $usuario_id))
+                return false;
+
+            $qb = $this->obterQueryBuilder();
+            $expr = $qb->expr();
+
+            $qb->delete('departamentos_usuarios')
+                ->where(
+                    $expr->andX(
+                        $expr->eq('id_departamento', ':dpto'),
+                        $expr->eq('id_usuario', ':usuario')
+                    )
+                )
+                ->setParameter('dpto', $departamento_id)
+                ->setParameter('usuario', $usuario_id)
+                ->execute();
+
+            return true;
         } catch (Exception $ex) {
             $this->adicionarErro($ex->getMessage());
             return false;
